@@ -1,7 +1,6 @@
 #include "PmergeMe.hpp"
 #include <algorithm>
 #include <cstdlib>
-#include <cerrno>
 #include <climits>
 #include <cctype>
 #include <iostream>
@@ -44,15 +43,12 @@ long PmergeMe::parseToken(const std::string &token)
 			throw ParseException();
 	}
 
-	errno = 0;
 	char *end = NULL;
 	long value = std::strtol(token.c_str(), &end, 10);
 
 	if (end == token.c_str() || *end != '\0')
 		throw ParseException();
-	if (errno == ERANGE || value > INT_MAX)
-		throw ParseException();
-	if (value <= 0)
+	if (value > INT_MAX || value <= 0)
 		throw ParseException();
 
 	return (value);
@@ -124,11 +120,9 @@ std::vector<size_t> PmergeMe::jacobsthalOrder(size_t m)
 std::vector<long> PmergeMe::sortVector(std::vector<long> input)
 {
 	size_t n = input.size();
+	std::cout << n << std::endl;
 	if (n <= 1)
-	{
-		std::cout << "DEBUG\n";
 		return (input);
-	}
 
 	size_t m = n / 2;
 	bool hasStraggler = (n % 2 == 1);

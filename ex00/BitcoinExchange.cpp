@@ -136,6 +136,21 @@ void BitcoinExchange::processInput(const std::string &filename) const
 	std::string line;
 	std::getline(file, line);
 
+	size_t sepHeader = line.find('|');
+	if (sepHeader == std::string::npos)
+	{
+		std::cout << "Error: invalid header" << std::endl;
+		return;
+	}
+
+	std::string dateHeader = trim(line.substr(0, sepHeader));
+	std::string valueHeader = trim(line.substr(sepHeader + 1));
+
+	if (dateHeader != "date" || valueHeader != "value") {
+		std::cout << "Error: invalid header" << std::endl;
+		return;
+	}
+
 	while (std::getline(file, line))
 	{
 		if (line.empty())
