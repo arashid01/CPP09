@@ -54,12 +54,36 @@ long PmergeMe::parseToken(const std::string &token)
 	return (value);
 }
 
-std::vector<long> PmergeMe::parseArgs(int argc, char **argv)
+std::vector<long> PmergeMe::parseArgsVec(int argc, char **argv)
 {
 	std::vector<long> result;
 
-	if (argc < 2)
-		throw ParseException();
+	for (int i = 1; i < argc; i++)
+	{
+		std::string arg(argv[i]);
+		size_t pos = 0;
+
+		while (pos < arg.size())
+		{
+			while (pos < arg.size() && std::isspace(static_cast<unsigned char>(arg[pos])))
+				pos++;
+			if (pos >= arg.size())
+				break;
+
+			size_t start = pos;
+			while (pos < arg.size() && !std::isspace(static_cast<unsigned char>(arg[pos])))
+				pos++;
+
+			std::string token = arg.substr(start, pos - start);
+			result.push_back(parseToken(token));
+		}
+	}
+	return (result);
+}
+
+std::deque<long> PmergeMe::parseArgsDeq(int argc, char **argv)
+{
+	std::deque<long> result;
 
 	for (int i = 1; i < argc; i++)
 	{
@@ -120,7 +144,7 @@ std::vector<size_t> PmergeMe::jacobsthalOrder(size_t m)
 std::vector<long> PmergeMe::sortVector(std::vector<long> input)
 {
 	size_t n = input.size();
-	std::cout << n << std::endl;
+
 	if (n <= 1)
 		return (input);
 

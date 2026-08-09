@@ -17,7 +17,8 @@ class PmergeMe
 		PmergeMe &operator=(const PmergeMe &other);
 		~PmergeMe();
 
-		static std::vector<long>	parseArgs(int argc, char **argv);
+		static std::vector<long>	parseArgsVec(int argc, char **argv);
+		static std::deque<long>		parseArgsDeq(int argc, char **argv);
 		static long					parseToken(const std::string &token);
 
 		static std::vector<long>	sortVector(std::vector<long> input);
